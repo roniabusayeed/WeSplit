@@ -12,11 +12,25 @@ struct ContentView: View {
     @State private var billAmount: Double = 0.0
     @State private var numberOfPeople: Int = 2
     @State private var tipPercentage: Double = 0.2
-    let tipPercentages: [Double] = [0.25, 0.2, 0.15, 0.1, 0.05, 0.0]
+    
+    let tipPercentages: [Double] = (0...100).map {
+        Double($0) / 100.0
+    }
+    
+    private var totalBillAmount: Double {
+        billAmount + billAmount * tipPercentage
+    }
     
     private var individualBillAmount: Double {
-        // Calculate individual bill amount.
-        (billAmount + billAmount * tipPercentage) / Double(numberOfPeople)
+        totalBillAmount / Double(numberOfPeople)
+    }
+    
+    private var currencyCode: String {
+        Locale.current.currency?.identifier ?? "USD"
+    }
+    
+    private var currency: FloatingPointFormatStyle<Double>.Currency {
+        .currency(code: currencyCode)
     }
     
     @FocusState private var isFocusedBillAmount: Bool
@@ -26,7 +40,7 @@ struct ContentView: View {
             Form {
                 
                 Section {
-                    TextField("Bill amount", value: $billAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    TextField("Bill amount", value: $billAmount, format: currency)
                         .keyboardType(.decimalPad)
                         .focused($isFocusedBillAmount)
                     
@@ -45,15 +59,21 @@ struct ContentView: View {
                             Text($0, format: .percent)
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.navigationLink)
                 } header: {
                     Text("Tips")
                 }
                 
                 Section {
-                    Text(individualBillAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    Text(individualBillAmount, format: currency)
                 } header: {
                     Text("Individual")
+                }
+                
+                Section {
+                    Text(totalBillAmount, format: currency)
+                } header: {
+                    Text("Total Bill")
                 }
             }
             .navigationTitle("WeSplit")
