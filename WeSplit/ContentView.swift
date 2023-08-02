@@ -72,6 +72,7 @@ struct ContentView: View {
                 
                 Section {
                     Text(totalBillAmount, format: currency)
+                        .foregroundColor(tipPercentage == 0 ? .red : .black)    // if the user leaves no tip, the total bill is displayed in red.
                 } header: {
                     Text("Total Bill")
                 }
