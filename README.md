@@ -18,7 +18,7 @@ WeSplit is a simple and intuitive iOS app designed to make splitting the bill at
 
 ## Screenshots
 
-![Screenshot 1](images/WeSplitScreenShot.png)
+<img src="images/WeSplitScreenShot.png" width="300">
 
 ## License
 
